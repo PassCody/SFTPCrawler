@@ -26,6 +26,7 @@ public class Ziper {
                 this.repackZipFile(this.source, this.destination);
                 System.out.println("New ZIP File is generated.");
                 this.removeFileFromZip(this.destination, folder+"/");
+                this.upackedFileRemover(preSource+"\\"+folder+"\\");
             } else {
                 this.source = preSource + "/" + this.sourceFolder;
                 this.destination = preSource + "/" + destinationFolder + "/" + fileName;
@@ -75,7 +76,6 @@ public class Ziper {
             }
             zipOut.putNextEntry(zipEntry);
             fis.transferTo(zipOut);
-
         }
     }
 
@@ -87,10 +87,10 @@ public class Ziper {
             ZipEntry entry;
             boolean fileFound = false;
             while ((entry = zis.getNextEntry()) != null) {
-                System.out.println("Processing entry: " + entry.getName());
+                //System.out.println("Processing entry: " + entry.getName());
                 if (entry.getName().equals(fileToRemove)) {
                     fileFound = true;
-                    System.out.println("File to remove found: " + entry.getName());
+                    //System.out.println("File to remove found: " + entry.getName());
                     continue;
                 }
                 zos.putNextEntry(new ZipEntry(entry.getName()));
@@ -125,6 +125,20 @@ public class Ziper {
              FileOutputStream fos = new FileOutputStream(outputFile);
              GzipCompressorOutputStream gos = new GzipCompressorOutputStream(fos)) {
             fis.transferTo(gos);
+        }
+    }
+
+    private void upackedFileRemover(String sourceFilePath) {
+        File folder = new File(sourceFilePath);
+        File[] childs = folder.listFiles();
+        for (int i = 0; i < childs.length; i++) {
+            if (!childs[i].getName().equals(sourceFilePath) || !childs[i].getName().equals(sourceFilePath.replace("/", ""))) {
+                if (childs[i].delete()) {
+                    System.out.println("File " + childs[i].getName() + " was deleted.");
+                } else {
+                    System.out.println("File " + childs[i].getName() + " could not be deleted.");
+                }
+            }
         }
     }
 }
