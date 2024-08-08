@@ -7,6 +7,7 @@ import com.jcraft.jsch.Channel;
 
 public class CrawlerSession {
 
+    public boolean isConnected = false;
     private Session session;
 
     public CrawlerSession(String username, String host, int port, CrawlerClient client) {
@@ -28,12 +29,16 @@ public class CrawlerSession {
     public void connect() {
         try {
             this.session.connect();
+            this.isConnected = true;
         } catch (JSchException e) {
             throw new RuntimeException(e);
         }
     }
     public void disconnect() {
-        this.session.disconnect();
+        if (isConnected) {
+            this.session.disconnect();
+            this.isConnected = false;
+        }
     }
 
     public Channel openChannel(String channelType){

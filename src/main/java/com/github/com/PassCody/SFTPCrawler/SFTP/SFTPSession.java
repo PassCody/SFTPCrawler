@@ -21,23 +21,26 @@ public class SFTPSession extends SFTPLoginData {
         this.config = new CrawlerProperties();
         this.config.addConfigPropertie("StrictHostKeyChecking", "no");
         this.session.conifgerSession(this.config);
-        this.channel = new CrawlerChannel(this.getSession(), super.getSFTP_CHANNEL_TYPE());
-        this.session.connect();
     }
 
     public void connectToSFTP() {
         this.session.connect();
+        this.channel = new CrawlerChannel(this.getCrawlerSession(), super.getSFTP_CHANNEL_TYPE());
     }
     public void disconnectFromSFTP() {
         this.channel.exitChannels();
         this.session.disconnect();
     }
 
-    public CrawlerSession getSession() {
+    public CrawlerSession getCrawlerSession() {
         return this.session;
     }
 
-    public CrawlerClient crawlerClient() {
+    public CrawlerClient getCrawlerClient() {
         return this.client;
+    }
+
+    public CrawlerChannel getCrawlerChannel() {
+        return this.channel;
     }
 }
