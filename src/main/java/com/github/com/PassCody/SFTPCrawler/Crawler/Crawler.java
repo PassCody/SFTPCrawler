@@ -12,6 +12,7 @@ public class Crawler extends CrawlerPaths{
     private Unziper unziper;
     private Ziper ziper;
     private CrawlerFile cFile = new CrawlerFile();
+    private FileUploader uploader;
 
     public Crawler(SFTPSession sftp) {
         super();
@@ -31,6 +32,7 @@ public class Crawler extends CrawlerPaths{
                 this.ziper  = new Ziper(fileName, super.getCRAWLER_LOCAL_PATH(), "Unpacking", "newZIPFiles");
             }
         }
+        this.uploader = new FileUploader(sftp.getCrawlerChannel(),super.getCRAWLER_LOCAL_PATH(), "newZIPFiles", super.getCRAWLER_REMTOE_PATH()+"/NewFiles/");
         sftp.disconnectFromSFTP();
     }
 }
