@@ -16,9 +16,9 @@ public class Crawler extends CrawlerPaths{
 
     public Crawler(SFTPSession sftp) {
         super();
-        sftp = new SFTPSession();
-        sftp.connectToSFTP();
-        for (ChannelSftp.LsEntry entry : sftp.getCrawlerChannel().readRemotePath(super.getCRAWLER_REMTOE_PATH())) {
+        this.sftp = sftp;
+        this.sftp.connectToSFTP();
+        for (ChannelSftp.LsEntry entry : this.sftp.getCrawlerChannel().readRemotePath(super.getCRAWLER_REMTOE_PATH())) {
             String newRemotePath = "";
             String fileName = entry.getFilename();
             if (fileName.toLowerCase().contains(".zip") || fileName.toLowerCase().contains(".gz") ) {
@@ -27,12 +27,12 @@ public class Crawler extends CrawlerPaths{
                 } else {
                     newRemotePath = super.getCRAWLER_REMTOE_PATH()+"\\"+fileName;
                 }
-                sftp.getCrawlerChannel().downloadFile(super.getCRAWLER_LOCAL_PATH(), newRemotePath);
+                this.sftp.getCrawlerChannel().downloadFile(super.getCRAWLER_LOCAL_PATH(), newRemotePath);
                 this.unziper = new Unziper(fileName, super.getCRAWLER_LOCAL_PATH(), "Unpacking");
                 this.ziper  = new Ziper(fileName, super.getCRAWLER_LOCAL_PATH(), "Unpacking", "newZIPFiles");
             }
         }
-        this.uploader = new FileUploader(sftp.getCrawlerChannel(),super.getCRAWLER_LOCAL_PATH(), "newZIPFiles", super.getCRAWLER_REMTOE_PATH()+"/NewFiles/");
-        sftp.disconnectFromSFTP();
+        this.uploader = new FileUploader(this.sftp.getCrawlerChannel(),super.getCRAWLER_LOCAL_PATH(), "newZIPFiles", super.getCRAWLER_REMTOE_PATH()+"/NewFiles/");
+        this.sftp.disconnectFromSFTP();
     }
 }
