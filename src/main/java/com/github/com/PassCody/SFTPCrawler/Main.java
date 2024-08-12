@@ -4,11 +4,10 @@ import com.github.com.PassCody.SFTPCrawler.Crawler.Crawler;
 import com.github.com.PassCody.SFTPCrawler.SFTP.*;
 
 public class Main {
-    private SFTPSession sftp;
     private Crawler crawler;
 
     public Main () {
-        this.crawler = new Crawler(this.sftp);
+        this.crawler = new Crawler(new SFTPSession);
     }
 
     public static void main(String[] args) {
